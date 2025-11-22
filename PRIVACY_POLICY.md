@@ -72,6 +72,6 @@ We may update this policy to reflect product or regulatory changes. The “Last 
 
 ## 9. Contact
 
-For privacy questions or requests, email: **ryouta20040817@gmail.com**
+For privacy questions or requests, email: **ryouta996445@gmail.com**
 
 ---
