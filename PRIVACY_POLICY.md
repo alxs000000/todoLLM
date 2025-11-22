@@ -1,78 +1,77 @@
 # Privacy Policy for LLM Todo Manager
 
-_Last updated: 2025-11-12_
+_Last updated: 2025-11-23_
 
-LLM Todo Manager (“the App”) is developed and maintained by Ryota Kando (“we”, “our”, “us”). This policy describes how we handle data when you use the App, its companion widget, and any related services (such as our Firebase backend and GitHub pages).
+LLM Todo Manager (the “App”) is provided by Ryota Kando (“we”, “our”, “us”). This notice describes what data we collect, how we use it, where it flows (including Firebase and Google Gemini), and the controls available to you.
 
-This document is intended for publication on GitHub (and optionally GitHub Pages) so that the same URL can be supplied inside the app’s **Settings** screen and on the App Store.
+This document is intended to be shown in the App Store listing and inside the app (Settings ▸ Privacy Policy).
 
 ---
 
-## 1. Data We Collect
+## 1. Data We Collect and Why
 
-| Category | Examples | Purpose | Linked? | Used for Tracking? |
+| Category | Examples | Purpose | Linked to you? | Used for tracking? |
 | --- | --- | --- | --- | --- |
-| **App settings & preferences** | Theme, language override, notification toggle, task retention setting, day-start time | Persist your personalized experience across launches and between the app and widget | No | No |
-| **Todo content** | Task titles, notes, icons, deadlines, completion status, completion history | Core functionality: managing todos, syncing with the Focus Today widget, generating statistics | No | No |
-| **Voice & transcription data** | Microphone input, intermediate speech-recognition transcripts | Converting spoken commands into todos | No | No |
-| **Firebase identifiers** | Anonymous Firebase Authentication UID, temporary App Check tokens | Authenticate securely with our Firebase Functions endpoint and prevent abuse | No | No |
-| **AI prompts** | The text you send to the in-app assistant, including the last few turns of conversation | Generate todos through our Firebase-hosted Gemini integration | No | No |
+| App settings & preferences | Theme, language override, notification toggle, day-start time, task retention | Persist your customization across launches and in the widget | No (stored locally) | No |
+| Todo content | Task titles, notes, deadlines, icons, completion status, completion history | Core functionality: manage tasks, show stats, power the widget | No (stored locally) | No |
+| Voice input & transcription | Microphone audio and temporary speech-to-text results | Convert spoken instructions into todos | No (processed for the request only) | No |
+| AI prompts | Text you send to the assistant and a short recent history | Generate todos via our Gemini-based assistant | No (sent with anonymous UID) | No |
+| Anonymous identifiers | Firebase anonymous UID; App Check attestation token | Authenticate requests and protect the backend from abuse | Not linked to personal identity | No |
+| Purchase state | In-app purchase transactions managed by Apple | Determine subscription entitlement | Handled by Apple; we store only a boolean flag | No |
 
-We do **not** collect contact information, payment data, precise location, or advertising identifiers. We also do not use data for cross-app tracking.
+We do **not** collect contact information, precise location, advertising identifiers, or analytics profiles. We do not use data for cross-app or cross-site tracking.
 
-## 2. How Data Is Stored
+## 2. Where Data Is Stored and Processed
 
-- **On-device:** Todos, settings, and statistics are stored in Core Data and `UserDefaults` inside the App Group container shared with the widget.
-- **Remote services:** When you invoke the AI assistant, your prompt (and the recent conversation context) plus an anonymous Firebase UID are transmitted via HTTPS to our Firebase Cloud Functions endpoint hosted in the `asia-northeast1` region. The function forwards the prompt to Google’s Gemini API, receives structured todos, and returns them to the device. We do not build long-term profiles or analytics from this traffic.
+- **On-device (App Group container):** Todos, settings, completion stats, and notification preferences are saved locally using Core Data and UserDefaults. The widget reads from the same container.
+- **Firebase (Google LLC):** When you use the assistant, we send your prompt, recent conversation context, and anonymous Firebase UID over HTTPS to a Callable Cloud Function in the `asia-northeast1` region. App Check ensures the caller is a legitimate app build.
+- **Google Gemini API:** Our Cloud Function forwards the prompt to Gemini and returns structured todos. We do not attach names, emails, or advertising IDs.
+- **Speech recognition:** Performed via Apple’s Speech framework. Audio and intermediate transcripts are used only to produce text for your request.
+- **Payments:** Subscriptions are processed by Apple. We do not receive card numbers or billing addresses; we only store whether a purchase is active.
 
 ## 3. Third-Party Services
 
-| Service | Purpose | Shared Data |
+| Service | Purpose | Data shared |
 | --- | --- | --- |
-| **Firebase Authentication (Google LLC)** | Provides anonymous auth so each device has a stable, non-personal identifier | Anonymous UID only |
-| **Firebase App Check (Google LLC)** | Issues attestation tokens so only legitimate app instances reach our backend | Device/app integrity signal, no user data |
-| **Firebase Cloud Functions (Google LLC)** | Hosts the `generateTodos` callable function that formats prompts for Gemini and returns structured todos | Anonymous UID + prompt payload |
-| **Google Gemini API** | Converts natural language prompts into todo lists | Prompt text (may include user-generated todo descriptions) |
+| Firebase Authentication | Issue an anonymous UID per device/session | Anonymous UID |
+| Firebase App Check | Attestation to block modified/abusive clients | Integrity token |
+| Firebase Cloud Functions | Host the `generateTodos` endpoint | Prompt text + anonymous UID |
+| Google Gemini API | Convert natural language into structured todos | Prompt text |
+| Apple Speech framework | Convert voice to text | Audio stream & transcripts for the request |
+| Apple In‑App Purchase | Manage subscriptions | Transaction metadata handled by Apple |
 
-Each provider processes data under its own privacy policy; however, we only transmit what is needed for the features you request.
+Each provider processes data under its own privacy policy. We transmit only what is required to deliver the requested feature.
 
 ## 4. Data Retention & Deletion
 
-- **On-device data** remains until you delete it via the Settings screen (“Clear All”, “Purge Completed Todos”, or “Reset Statistics”) or uninstall the app.
-- **AI prompts on Firebase** are logged temporarily for debugging and are automatically removed after 30 days.
-- We retain no server-side backups that could re-identify you once the retention period ends.
+- **On-device data:** Remains until you delete it via Settings (e.g., “Clear All Todos”, “Reset Statistics”) or uninstall the app.
+- **Assistant prompts:** Stored transiently in Firebase logs for reliability/abuse investigation and auto-deleted within 30 days. We do not build user profiles from prompts.
+- **Speech input:** Held only for the duration of recognition; not stored by us.
+- **Purchase state:** The local subscription flag can be cleared by deleting the app.
 
-## 5. Security
+## 5. Security Measures
 
-- All communications with Firebase and Gemini occur over TLS.
-- App Check ensures only valid builds interact with the backend.
-- Anonymous authentication avoids storing any personal identifiers.
+- All network traffic to Firebase and Gemini uses TLS.
+- Firebase App Check limits backend access to valid app builds.
+- Anonymous auth avoids collecting personally identifiable information.
+- Local data is stored in the app sandbox / App Group container.
 
-## 6. Your Choices
+## 6. Your Choices and Controls
 
-- **Notifications & microphone access:** Managed through iOS settings and the in-app toggles.
-- **Data deletion:** Use the actions under _Settings ▸ Data Management_.
-- **Opting out of AI:** You can use the app purely as a manual todo list without invoking the assistant.
+- **Notifications, Microphone, Speech Recognition:** iOS permission prompts and system Settings control access. The app only functions with microphone/speech when you explicitly allow it.
+- **Manual use without AI:** You can create and manage todos entirely offline without invoking the assistant.
+- **Data deletion:** Use in-app options under Settings ▸ Data Management to clear todos and stats; uninstall the app to remove all local data.
 
 ## 7. Children’s Privacy
 
-The App is not directed to children under 13. We do not knowingly collect personal information from children. If you believe a child has provided us data, please contact us so we can delete it.
+The App is not directed to children under 13. We do not knowingly collect personal information from children. If you believe a child has provided data, contact us to request deletion.
 
-## 8. Updates to This Policy
+## 8. Changes to This Policy
 
-We may revise this policy as Apple, Firebase, or regulatory requirements evolve. The “Last updated” date at the top reflects the latest version. Significant changes will be highlighted in the GitHub repository and via release notes.
+We may update this policy to reflect product or regulatory changes. The “Last updated” date will change, and significant updates will be noted in release notes.
 
 ## 9. Contact
 
-For privacy questions or requests, please email: **ryouta20040817@gmail.com**
+For privacy questions or requests, email: **ryouta20040817@gmail.com**
 
 ---
-
-### 日本語での概要
-
-- アプリは設定やタスク情報を端末内（App Group コンテナ）に保存します。
-- 音声入力や AI 生成依頼時に送信されるテキスト／音声は、機能提供のためにのみ Firebase／Gemini へ送信されます。
-- 収集データは個人と紐付けておらず、トラッキング目的では利用しません。
-- データ削除は設定画面の「データ管理」から実行できます。
-
-詳細は上記の英語版本文をご確認ください。
